@@ -4,8 +4,9 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 
-const { PORT, AUTH_URL, ACCESS_URL, CLIENT_ID, CLIENT_SECRET } = process.env;
-const REDIRECT_URI = `http://localhost:${PORT}/oauth-callback`;
+const { HOST, PORT, AUTH_URL, ACCESS_URL, CLIENT_ID, CLIENT_SECRET } =
+  process.env;
+const REDIRECT_URI = `http://${HOST}:${PORT}/oauth-callback`;
 
 const app = express();
 app.use(cors({ credentials: true, origin: true }));
@@ -26,7 +27,7 @@ app.get("/oauth-callback", (req, res) => {
   const code = req.query.code;
   const body = {
     grant_type: "authorization_code",
-    redirect_uri: `http://localhost:${PORT}/oauth-callback`,
+    redirect_uri: `http://${HOST}:${PORT}/oauth-callback`,
     client_id: CLIENT_ID,
     client_secret: CLIENT_SECRET,
     code: code,
@@ -37,12 +38,11 @@ app.get("/oauth-callback", (req, res) => {
     data: body,
   })
     .then((response) => {
-      console.log(response);
       res.json(response.data);
     })
     .catch((err) => res.status(500).json(err));
 });
 
 app.listen(PORT, () => {
-  console.log(`app listening on https://localhost:${PORT}`);
+  console.log(`app listening on http://${HOST}:${PORT}`);
 });
