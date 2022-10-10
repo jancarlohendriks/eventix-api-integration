@@ -38,7 +38,17 @@ app.get("/oauth-callback", (req, res) => {
     data: body,
   })
     .then((response) => {
-      res.json(response.data);
+      axios({
+        method: "get",
+        url: "https://api.eventix.io/3.0.0/scanner",
+        headers: { Authorization: `Bearer ${response.data.access_token}` },
+      })
+        .then((data) => {
+          console.log(data.data);
+          res.json(data.data);
+        })
+        .catch((err) => res.status(500).json(err));
+      // res.json(response.data);
     })
     .catch((err) => res.status(500).json(err));
 });
