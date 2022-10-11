@@ -25,9 +25,7 @@ app.get("/scanners", (req, res) => {
     url: "https://api.eventix.io/3.0.0/scanner",
     headers: { Authorization: decodeURIComponent(auth) },
   })
-    .then((data) => {
-      res.json(data.data);
-    })
+    .then((data) => res.json(data.data))
     .catch((err) => res.status(500).json(err));
 });
 
@@ -39,9 +37,7 @@ app.get("/shop", (req, res) => {
     url: "https://api.eventix.io/3.0.0/shop",
     headers: { Authorization: decodeURIComponent(auth) },
   })
-    .then((data) => {
-      res.json(data.data);
-    })
+    .then((data) => res.json(data.data))
     .catch((err) => res.status(500).json(err));
 });
 
@@ -52,15 +48,6 @@ app.get("/auth", (req, res) => {
     )}`
   );
 });
-
-// app.use((req, res, next) => {
-//   res.cookie("cookieName", "1", {
-//     expires: new Date(Date.now() + 900000),
-//     httpOnly: true,
-//   });
-//   console.dir(req.cookies.cookieName);
-//   next();
-// });
 
 app.get("/oauth-callback", (req, res) => {
   const code = req.query.code;
