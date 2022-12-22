@@ -1,8 +1,7 @@
 const axios = require("axios");
 const path = require("path");
 
-const { HOST, PORT, AUTH_URL, ACCESS_URL, CLIENT_ID, CLIENT_SECRET } =
-  process.env;
+const { HOST, PORT, ACCESS_URL, CLIENT_ID, CLIENT_SECRET } = process.env;
 
 const requestAuthToken = (req, res) => {
   const code = req.query.code;
