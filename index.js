@@ -1,9 +1,12 @@
+require("dotenv").config();
+
 const path = require("path");
 const axios = require("axios");
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-require("dotenv").config();
+
+const requestAuthToken = require("./utils/requestAuthToken");
 
 const { HOST, PORT, AUTH_URL, ACCESS_URL, CLIENT_ID, CLIENT_SECRET } =
   process.env;
@@ -49,26 +52,7 @@ app.get("/auth", (req, res) => {
   );
 });
 
-app.get("/oauth-callback", (req, res) => {
-  const code = req.query.code;
-  const body = {
-    grant_type: "authorization_code",
-    redirect_uri: `http://${HOST}:${PORT}/oauth-callback`,
-    client_id: CLIENT_ID,
-    client_secret: CLIENT_SECRET,
-    code: code,
-  };
-  axios({
-    method: "post",
-    url: ACCESS_URL,
-    data: body,
-  })
-    .then((response) => {
-      res.cookie("auth", `Bearer ${response.data.access_token}`);
-      res.sendFile(path.join(__dirname, "/views/index.html"));
-    })
-    .catch((err) => res.status(500).json(err));
-});
+app.get("/oauth-callback", requestAuthToken);
 
 app.listen(PORT, () => {
   console.log(`app listening on http://${HOST}:${PORT}`);
